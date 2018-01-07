@@ -1,7 +1,6 @@
 const passport = require('passport');
 
 module.exports = app => {
-    // route handler
     app.get(
         '/auth/google', 
         passport.authenticate('google', {
@@ -9,16 +8,19 @@ module.exports = app => {
         })
     );
 
-    // route handler
-    app.get('/auth/google/callback', passport.authenticate('google'));
+    app.get(
+        '/auth/google/callback', 
+        passport.authenticate('google'),
+        (req, res) => {
+            res.redirect('/surveys');
+        }
+    );
 
-    // logout route handler
     app.get('/api/logout', (req, res) => {
         req.logout();
-        res.send(req.user);
+        res.redirect('/');
     });
 
-    // route handler
     app.get('/api/current_user', (req, res) => {
         res.send(req.user);
     });
